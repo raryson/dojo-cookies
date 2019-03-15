@@ -1,6 +1,19 @@
+let cookieRegistry = $.cookie();
+
+const monitorCookies = callback => setInterval(() => {
+  if(Object.keys($.cookie()).reduce((anyChanged, cookieKey) => {
+    return anyChanged || $.cookie(cookieKey) !== cookieRegistry[cookieKey];
+  }, false)) {
+    callback();
+    cookieRegistry = $.cookie();
+  }
+}, 100);
+
 const insertYourNameInHtmlPage = () => {
-    $('#cookie-div').append(`<h1>My name is ${$.cookie('name')}</h1>`)
-    $('#cookie-div').append(`<h1>My age is ${$.cookie('age')}</h1>`)
-    $('#cookie-div').append(`<h1>My favorite food is ${$.cookie('food')}</h1>`)
+    $('#name').text($.cookie('name'));
+    $('#age').text($.cookie('age'));
+    $('#food').text($.cookie('food'));
 }
-insertYourNameInHtmlPage()
+
+insertYourNameInHtmlPage();
+monitorCookies(insertYourNameInHtmlPage);
